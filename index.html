@@ -79,7 +79,6 @@
 				// Call the backend to generate hash
 				const response = await fetch("https://passbc.vercel.app/gh", {
 					method: "POST",
-					mode: 'no-cors',
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ input1, input2, input3, input4 }),
 				});
