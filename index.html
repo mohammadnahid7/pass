@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SHA-256 Hash Generator</title>
+		<style>
+			body {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			input {
+				border: 0;
+				background-color: rgb(235, 235, 235);
+				border: 2px solid rgb(226, 226, 226);
+				height: 40px;
+				width: 250px;
+				margin-left: 20px;
+				padding: 0 20px;
+				font-size: 18px;
+			}
+			button {
+				width: 200px;
+				height: 60px;
+				border: 0;
+				background-color: rgb(41, 255, 155);
+				font-size: 18px;
+				margin-top: 20px;
+			}
+			label {
+				display: inline-block;
+				width: 50px;
+			}
+			#copy {
+				width: 40px;
+				height: 30px;
+				font-size: 10px;
+				background-color: rgb(235, 235, 235);
+				border: 1px solid rgb(190, 190, 190);
+				margin-top: 0;
+			}
+			div {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin: 10px 0;
+			}
+			h3 {
+				margin-right: 20px;
+			}
+			p {
+				margin-right: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<div><label>Gmail</label><input type="text" id="input1" /><br /><br /></div>
+		<div><label>Platform</label><input type="text" id="input4" /><br /><br /></div>
+		<div><label>Name</label><input type="text" id="input2" /><br /><br /></div>
+		<div><label>Key</label><input type="text" id="input3" /><br /><br /></div>
+		<button onclick="generateHash()">Generate</button>
+		<div>
+			<h3>Password:</h3>
+			<p id="hash"></p>
+			<button id="copy" onclick="copyPassword()">Copy</button>
+		</div>
+
+		<script>
+			async function generateHash() {
+				const input1 = document.getElementById("input1").value;
+				const input2 = document.getElementById("input2").value;
+				const input3 = document.getElementById("input3").value;
+				const input4 = document.getElementById("input4").value;
+
+				// Call the backend to generate hash
+				const response = await fetch("http://localhost:3000/gh", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ input1, input2, input3, input4 }),
+				});
+
+				const data = await response.json();
+				document.getElementById("hash").textContent = data.password;
+			}
+			function copyPassword() {
+				const passwordText = document.getElementById("hash").textContent;
+
+				// Create a temporary textarea element to copy the text
+				const tempTextarea = document.createElement("textarea");
+				tempTextarea.value = passwordText;
+				document.body.appendChild(tempTextarea);
+				tempTextarea.select();
+
+				document.execCommand("copy");
+				document.body.removeChild(tempTextarea);
+			}
+		</script>
+	</body>
+</html>
